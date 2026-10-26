@@ -1,1 +1,8 @@
 *.mp4
+node_modules/
+dist/
+public/wasm/
+.emscripten-cache/
+.DS_Store
+test-results/
+playwright-report/

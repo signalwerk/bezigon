@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f4f0" />
+    <meta
+      name="description"
+      content="Draw Bezigon curves with the original C++ calculations, running in WebAssembly."
+    />
+    <title>Bezigon — playground</title>
+    <link rel="preconnect" href="https://fonts.signalwerk.ch" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.signalwerk.ch/css/latest/family=Work+Sans:ital,wght@0,100..900;1,100..900.css"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <a class="brand" href="./" aria-label="Bezigon home"
+          >Bezigon<span>playground</span></a
+        >
+        <nav class="credits" aria-label="About Bezigon">
+          <a href="https://gitlab.com/inkscape/inkscape/-/work_items/6476"
+            >Code by Taras V, Vivek R.</a
+          >
+          <span aria-hidden="true">·</span>
+          <a href="https://www.youtube.com/watch?v=w3ieED1z4gM">Bezigon explanation</a>
+        </nav>
+      </header>
+      <main>
+        <div class="toolbar" aria-label="Drawing controls">
+          <div class="tools">
+            <button id="undo" title="Undo (Cmd/Ctrl Z)" disabled>Undo</button>
+            <button id="redo" title="Redo (Cmd/Ctrl Shift Z)" disabled>Redo</button>
+            <span class="divider"></span>
+            <button id="handles" aria-pressed="true" title="Show or hide handles (D)">
+              Handles <kbd>D</kbd>
+            </button>
+          </div>
+          <div class="tools">
+            <label class="examples"
+              >Try an example
+              <select id="examples" aria-label="Load an example">
+                <option value="">Choose…</option>
+                <option value="0">1 · Shield</option>
+                <option value="1">2 · Line to curve</option>
+                <option value="2">3 · D shape</option>
+                <option value="3">4 · Tangent notch</option>
+                <option value="4">5 · Square</option>
+                <option value="5">6 · Teardrop</option>
+                <option value="6">7 · Wave</option>
+              </select></label
+            >
+            <button id="clear" title="Clear canvas (Esc)">Clear <kbd>esc</kbd></button>
+          </div>
+        </div>
+        <div class="workspace" id="workspace">
+          <canvas
+            id="canvas"
+            tabindex="0"
+            aria-busy="true"
+            aria-label="Bezigon drawing canvas. Click to add corners, Shift-click for smooth nodes, Ctrl-click for tangent nodes. Drag nodes or handles. Use the controls guide below for more shortcuts."
+          ></canvas>
+          <div class="empty" id="empty">
+            <h1>Try Bezigon</h1>
+            <p>
+              Click anywhere to begin.<br />Hold <kbd>shift</kbd> as you click to make it smooth.
+            </p>
+          </div>
+          <div
+            id="point-palette"
+            class="point-palette"
+            role="group"
+            aria-label="Selected point type"
+            hidden
+          >
+            <span id="selected-point-label" class="palette-label">Point</span>
+            <button type="button" data-point-type="0" aria-pressed="false" title="Corner point (C)">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="m3 18 9-10 9 10" />
+                <rect x="9" y="5" width="6" height="6" />
+              </svg>
+              <span>Corner</span>
+            </button>
+            <button type="button" data-point-type="1" aria-pressed="false" title="Smooth point (S)">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M3 18C6 6 18 6 21 18M4 9h16" />
+                <circle cx="12" cy="9" r="3" />
+              </svg>
+              <span>Smooth</span>
+            </button>
+            <button
+              type="button"
+              data-point-type="2"
+              aria-pressed="false"
+              title="Tangent point (T)"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M3 15h9c4 0 6-3 9-9" />
+                <path class="point-symbol" d="m12 11 3.5 6h-7z" />
+              </svg>
+              <span>Tangent</span>
+            </button>
+          </div>
+        </div>
+        <div class="statusbar">
+          <span id="status" role="status" aria-live="polite">Loading WebAssembly…</span
+          ><span id="mode">Click · Corner</span>
+        </div>
+        <section class="guide" aria-label="Controls guide">
+          <div>
+            <h2>Place a point</h2>
+            <p><i class="node corner"></i><span>Corner</span><kbd>click</kbd></p>
+            <p><i class="node smooth"></i><span>Smooth</span><kbd>shift + click</kbd></p>
+            <p><i class="node tangent"></i><span>Tangent</span><kbd>ctrl + click</kbd></p>
+          </div>
+          <div>
+            <h2>Shape the curve</h2>
+            <p>Drag a point or a visible handle.</p>
+            <p>Drag a Tangent's dashed handle tip to extend it.</p>
+            <p>
+              Change a selected point in the palette or with <kbd>C</kbd> / <kbd>S</kbd> /
+              <kbd>T</kbd>.
+            </p>
+          </div>
+          <div>
+            <h2>Finish & refine</h2>
+            <p>Click the first point to close. <kbd>shift</kbd> makes a cusp.</p>
+            <p>Or drag the last point onto the first to close.</p>
+            <p><kbd>enter</kbd> / right-click to finish · <kbd>R</kbd> resets handles.</p>
+          </div>
+        </section>
+      </main>
+      <footer><span>Inspired by Bezigon (FreeHand).</span></footer>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

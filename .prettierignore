@@ -1,0 +1,10 @@
+# Keep the original archives, notes, license, and upstream C++ unchanged.
+bezigon-cpp/
+
+# Installed dependencies and generated output.
+node_modules/
+dist/
+public/wasm/
+.emscripten-cache/
+test-results/
+playwright-report/

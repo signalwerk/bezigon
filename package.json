@@ -1,0 +1,27 @@
+{
+  "name": "bezigon-wasm",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "wasm": "node scripts/build-wasm.mjs",
+    "predev": "npm run wasm",
+    "dev": "vite --host 127.0.0.1",
+    "check": "tsc --noEmit",
+    "build": "npm run wasm && npm run check && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "npm run wasm && node --test tests/*.test.ts",
+    "test:browser": "npm run build && playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "prettier": "3.9.10",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.0"
+  }
+}
