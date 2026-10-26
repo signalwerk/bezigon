@@ -331,6 +331,10 @@ h2 {
   background: #bc852e;
   clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
 }
+footer a {
+  color: inherit;
+  text-underline-offset: 0.25em;
+}
 footer {
   max-width: calc(var(--content-width) + 2 * var(--page-gutter));
   padding: var(--space-8) var(--page-gutter) var(--space-5);

@@ -46,6 +46,7 @@ if (result.error)
 if (result.status === 0) {
   for (const file of ['bezigon.wasm', 'bezigon.mjs'])
     copyFileSync(join(staging, file), join(output, file));
+  copyFileSync(join(source, 'LICENSE.md'), join(output, 'LICENSE.txt'));
 }
 rmSync(staging, { recursive: true, force: true });
 process.exit(result.status ?? 1);
