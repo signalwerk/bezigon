@@ -113,6 +113,17 @@ export class Editor {
       this.engine.run(this.state);
     });
   }
+  resetSelectedHandles(): void {
+    if (this.dragging || !this.selected) return;
+    const index = this.selected.index;
+    const node = this.state.nodes[index];
+    if (!node || (!node.manualIn && !node.manualOut)) return;
+    this.edit(() => {
+      node.manualIn = node.manualOut = false;
+      this.engine.run(this.state);
+      this.selected = { kind: 'node', index };
+    });
+  }
   convert(type: NodeType): void {
     if (this.dragging) return;
     const hovered = this.pointer ? this.hitNode(this.pointer) : -1;

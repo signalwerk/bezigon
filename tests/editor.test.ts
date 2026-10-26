@@ -429,3 +429,59 @@ test('an unrelated pointer cancellation cannot erase the current placement', () 
   assert.equal(e.state.nodes.length, 2);
   assert.equal(e.state.nodes[1].x, 350);
 });
+
+test('resetting selected handles keeps other manual points and supports undo/redo', () => {
+  const e = editor();
+  click(e, 100, 100);
+  click(e, 300, 100);
+  click(e, 300, 300);
+  click(e, 500, 300);
+  const automatic = structuredClone(e.state.nodes[1]);
+  e.pointerDown(point(300, 178), 1, false, false);
+  e.pointerMove(point(350, 180), 1);
+  e.pointerUp(1, false);
+  e.pointerDown(point(378, 300), 1, false, false);
+  e.pointerMove(point(400, 350), 1);
+  e.pointerUp(1, false);
+  click(e, 300, 100);
+  const before = structuredClone(e.state);
+  assert.equal(before.nodes[1].manualOut, true);
+  assert.equal(before.nodes[2].manualOut, true);
+  e.resetSelectedHandles();
+  assert.deepEqual(e.state.nodes[1], automatic);
+  assert.deepEqual(e.state.nodes[2], before.nodes[2]);
+  assert.deepEqual(e.selectedTarget, { kind: 'node', index: 1 });
+  const after = structuredClone(e.state);
+  e.undo();
+  assert.deepEqual(e.state, before);
+  e.redo();
+  assert.deepEqual(e.state, after);
+});
+
+test('resetting a selected Tangent handle returns it to automatic and selects its point', () => {
+  const e = editor();
+  click(e, 100, 100);
+  click(e, 200, 100, 2);
+  click(e, 300, 200);
+  e.pointerDown(point(224, 100), 1, false, false);
+  e.pointerMove(point(260, 120), 1);
+  e.pointerUp(1, false);
+  const before = structuredClone(e.state);
+  e.resetSelectedHandles();
+  assert.equal(e.state.nodes[1].manualOut, false);
+  near(e.state.nodes[1].outX, 0);
+  near(e.state.nodes[1].outY, 0);
+  assert.deepEqual(e.selectedTarget, { kind: 'node', index: 1 });
+  e.undo();
+  assert.deepEqual(e.state, before);
+  assert.deepEqual(e.selectedTarget, { kind: 'out', index: 1 });
+});
+
+test('resetting an automatic point adds no undo step', () => {
+  const e = editor();
+  e.resetSelectedHandles();
+  click(e, 100, 100);
+  e.resetSelectedHandles();
+  e.undo();
+  assert.equal(e.state.nodes.length, 0);
+});

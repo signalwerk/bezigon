@@ -252,6 +252,32 @@ test('quick click then drag keeps the point at its final mouse-up position', asy
   }
 });
 
+test('the palette resets only adjusted handles and supports undo/redo', async ({ page }) => {
+  await click(page, 150, 150);
+  await click(page, 350, 150, ['Control']);
+  await click(page, 550, 350);
+  const palette = page.getByRole('group', { name: 'Selected point type' });
+  const reset = palette.getByRole('button', { name: 'Reset handles', exact: true });
+  await expect(reset).toBeDisabled();
+  const bounds = (await page.locator('canvas').boundingBox())!;
+  await page.mouse.move(bounds.x + 374, bounds.y + 150);
+  await page.mouse.down();
+  await page.mouse.move(bounds.x + 420, bounds.y + 180);
+  await page.mouse.up();
+  await expect(reset).toBeEnabled();
+  await expect(page.locator('#status')).toContainText('1 manually adjusted');
+  await reset.click();
+  await expect(reset).toBeDisabled();
+  await expect(page.locator('#status')).not.toContainText('manually adjusted');
+  await expect(palette.locator('#selected-point-label')).toHaveText('Point 2');
+  await page.locator('#undo').click();
+  await expect(reset).toBeEnabled();
+  await expect(page.locator('#status')).toContainText('1 manually adjusted');
+  await page.locator('#redo').click();
+  await expect(reset).toBeDisabled();
+  await expect(page.locator('#status')).not.toContainText('manually adjusted');
+});
+
 test('pointer capture cleanup does not discard a point or leave drawing stuck', async ({
   page,
 }) => {

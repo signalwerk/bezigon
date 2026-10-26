@@ -16,6 +16,7 @@ const status = element('status');
 const mode = element('mode');
 const palette = element('point-palette');
 const selectedPointLabel = element('selected-point-label');
+const resetSelectedHandles = element<HTMLButtonElement>('reset-selected-handles');
 const pointTypeButtons = Array.from(
   palette.querySelectorAll<HTMLButtonElement>('[data-point-type]'),
 );
@@ -47,6 +48,8 @@ function draw(): void {
   const selection = editor.selectedTarget;
   const selectedNode = selection ? state.nodes[selection.index] : null;
   palette.hidden = !selectedNode;
+  resetSelectedHandles.disabled =
+    editor.dragging || !selectedNode || !(selectedNode.manualIn || selectedNode.manualOut);
   if (selectedNode && selection) selectedPointLabel.textContent = `Point ${selection.index + 1}`;
   for (const button of pointTypeButtons) {
     button.setAttribute(
@@ -138,6 +141,7 @@ window.addEventListener('blur', () => {
 undo.addEventListener('click', () => editor?.undo());
 redo.addEventListener('click', () => editor?.redo());
 handles.addEventListener('click', () => editor?.toggleHandles());
+resetSelectedHandles.addEventListener('click', () => editor?.resetSelectedHandles());
 for (const button of pointTypeButtons) {
   button.addEventListener('click', () =>
     editor?.convertSelected(Number(button.dataset.pointType) as NodeType),
