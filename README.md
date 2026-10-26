@@ -29,5 +29,8 @@ npm run format:check # check formatting
 For browser tests, run `npx playwright install chromium` once, then `npm run test:browser`.
 
 Original C++ by Taras V, Vivek R. ([MIT](bezigon-cpp/LICENSE.md)).
-[Source discussion](https://gitlab.com/inkscape/inkscape/-/work_items/6476) ·
-[Bezigon explanation](https://www.youtube.com/watch?v=w3ieED1z4gM).
+
+- [VectorStyler code discussion](https://www.vectorstyler.com/forum/topic/4994/bezigon-tool/)
+- [PhotoLine discussion](https://www.pl32.com/forum3/viewtopic.php?t=7360)
+- [Inkscape discussion](https://gitlab.com/inkscape/inkscape/-/work_items/6476)
+- [Bezigon explanation](https://www.youtube.com/watch?v=w3ieED1z4gM)
