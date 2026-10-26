@@ -28,7 +28,13 @@ npm run format:check # check formatting
 
 For browser tests, run `npx playwright install chromium` once, then `npm run test:browser`.
 
-Original C++ by Taras V, Vivek R. ([MIT](bezigon-cpp/LICENSE.md)).
+## License
+
+The editor code written for this project (TypeScript, HTML and CSS) is dedicated
+to the public domain.
+
+The Bezigon C++ library and its compiled WebAssembly remain licensed under the
+[MIT License](bezigon-cpp/LICENSE.md). Original C++ by Taras V, Vivek R.
 
 - [VectorStyler code discussion](https://www.vectorstyler.com/forum/topic/4994/bezigon-tool/)
 - [PhotoLine discussion](https://www.pl32.com/forum3/viewtopic.php?t=7360)
